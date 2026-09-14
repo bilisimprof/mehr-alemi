@@ -1,0 +1,56 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  pageClass?: string;
+}
+
+const {
+  title = 'mehr alemi',
+  description = 'şiir, düz yazı ve görsel hafıza',
+  pageClass = '',
+} = Astro.props;
+
+const fullTitle = title === 'mehr alemi' ? title : `${title} — mehr alemi`;
+---
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#eee2d0" />
+    <title>{fullTitle}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Literata:opsz,wght@7..72,400;7..72,500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class={pageClass}>
+    <div class="paper-noise" aria-hidden="true"></div>
+
+    <header class="site-header">
+      <a class="brand" href="/">mehr alemi</a>
+      <nav class="main-nav" aria-label="ana menü">
+        <a href="/">yazılar</a>
+        <a href="/hakkinda/">hakkında</a>
+      </nav>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <span>mehr alemi</span>
+    </footer>
+
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+  </body>
+</html>
