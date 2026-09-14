@@ -94,9 +94,12 @@ const sceneClass = (index: number) => {
     const loadMore = document.querySelector('.load-more');
     const currentEl = document.querySelector('.scene-current');
     const totalEl = document.querySelector('.scene-total');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     let activeFilter = 'hepsi';
     let limit = 5;
+    let sceneObserver;
+    let revealObserver;
 
     function matchingScenes() {
       return scenes.filter((scene) =>
@@ -114,53 +117,38 @@ const sceneClass = (index: number) => {
       if (currentEl && total === 0) currentEl.textContent = '00';
     }
 
-    function renderArchive() {
-      const matches = matchingScenes();
+    function setupRevealObserver() {
+      revealObserver?.disconnect();
 
-      scenes.forEach((scene) => {
-        scene.hidden = true;
-        scene.classList.remove('is-revealed');
-      });
-
-      matches.slice(0, limit).forEach((scene, i) => {
-        scene.hidden = false;
-        requestAnimationFrame(() => {
-          setTimeout(() => scene.classList.add('is-revealed'), i * 55);
-        });
-      });
-
-      if (loadMore) {
-        loadMore.hidden = matches.length <= limit;
+      if (reduceMotion) {
+        visibleScenes().forEach((scene) => scene.classList.add('is-revealed'));
+        return;
       }
 
-      updateCounterTotal();
-      observeScenes();
+      revealObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add('is-revealed');
+            revealObserver.unobserve(entry.target);
+          });
+        },
+        {
+          threshold: 0.12,
+          rootMargin: '0px 0px -8% 0px',
+        }
+      );
+
+      visibleScenes().forEach((scene) => revealObserver.observe(scene));
     }
 
-    filters.forEach((button) => {
-      button.addEventListener('click', () => {
-        activeFilter = button.dataset.filter || 'hepsi';
-        limit = 5;
-        filters.forEach((b) => b.classList.toggle('is-active', b === button));
-        renderArchive();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      });
-    });
-
-    loadMore?.addEventListener('click', () => {
-      limit += 4;
-      renderArchive();
-    });
-
-    let observer;
-
-    function observeScenes() {
-      observer?.disconnect();
+    function setupCurrentSceneObserver() {
+      sceneObserver?.disconnect();
 
       const activeScenes = visibleScenes();
       if (!activeScenes.length) return;
 
-      observer = new IntersectionObserver(
+      sceneObserver = new IntersectionObserver(
         (entries) => {
           const visible = entries
             .filter((entry) => entry.isIntersecting)
@@ -180,14 +168,88 @@ const sceneClass = (index: number) => {
           });
         },
         {
-          root: null,
-          threshold: [0.35, 0.55, 0.72],
-          rootMargin: '-10% 0px -10% 0px',
+          threshold: [0.3, 0.48, 0.66],
+          rootMargin: '-12% 0px -16% 0px',
         }
       );
 
-      activeScenes.forEach((scene) => observer.observe(scene));
+      activeScenes.forEach((scene) => sceneObserver.observe(scene));
     }
+
+    function renderArchive() {
+      const matches = matchingScenes();
+
+      scenes.forEach((scene) => {
+        scene.hidden = true;
+        scene.classList.remove('is-revealed', 'is-current');
+      });
+
+      matches.slice(0, limit).forEach((scene) => {
+        scene.hidden = false;
+      });
+
+      if (loadMore) {
+        loadMore.hidden = matches.length <= limit;
+      }
+
+      updateCounterTotal();
+      setupRevealObserver();
+      setupCurrentSceneObserver();
+      scheduleParallax();
+    }
+
+    filters.forEach((button) => {
+      button.addEventListener('click', () => {
+        activeFilter = button.dataset.filter || 'hepsi';
+        limit = 5;
+        filters.forEach((b) => b.classList.toggle('is-active', b === button));
+        renderArchive();
+
+        if (!reduceMotion) {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+          window.scrollTo(0, 0);
+        }
+      });
+    });
+
+    loadMore?.addEventListener('click', () => {
+      limit += 4;
+      renderArchive();
+    });
+
+    // Hafif parallax: yalnızca transform kullanır, requestAnimationFrame ile throttle edilir.
+    let ticking = false;
+
+    function updateParallax() {
+      ticking = false;
+      if (reduceMotion || window.innerWidth < 761) return;
+
+      const viewportCenter = window.innerHeight / 2;
+
+      visibleScenes().forEach((scene) => {
+        const media = scene.querySelector('.scene-media img');
+        if (!media) return;
+
+        const rect = scene.getBoundingClientRect();
+        if (rect.bottom < -100 || rect.top > window.innerHeight + 100) return;
+
+        const sceneCenter = rect.top + rect.height / 2;
+        const distance = (sceneCenter - viewportCenter) / window.innerHeight;
+        const translate = Math.max(-14, Math.min(14, distance * -12));
+
+        media.style.setProperty('--parallax-y', `${translate}px`);
+      });
+    }
+
+    function scheduleParallax() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(updateParallax);
+    }
+
+    window.addEventListener('scroll', scheduleParallax, { passive: true });
+    window.addEventListener('resize', scheduleParallax);
 
     renderArchive();
   </script>
