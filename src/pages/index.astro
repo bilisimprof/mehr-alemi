@@ -38,7 +38,7 @@ const sceneClass = (index: number) => {
     </div>
   </div>
 
-  <section class="story-stream" data-visible-count="5">
+  <section class="story-stream" data-visible-count="6">
     {entries.map((entry, index) => (
       <article
         class={`story-scene ${sceneClass(index)} ${entry.data.featured ? 'is-featured' : ''}`}
@@ -97,7 +97,7 @@ const sceneClass = (index: number) => {
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     let activeFilter = 'hepsi';
-    let limit = 5;
+    let limit = 6;
     let sceneObserver;
     let revealObserver;
 
@@ -201,7 +201,7 @@ const sceneClass = (index: number) => {
     filters.forEach((button) => {
       button.addEventListener('click', () => {
         activeFilter = button.dataset.filter || 'hepsi';
-        limit = 5;
+        limit = 6;
         filters.forEach((b) => b.classList.toggle('is-active', b === button));
         renderArchive();
 
@@ -214,7 +214,7 @@ const sceneClass = (index: number) => {
     });
 
     loadMore?.addEventListener('click', () => {
-      limit += 4;
+      limit += 6;
       renderArchive();
     });
 
