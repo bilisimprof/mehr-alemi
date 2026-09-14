@@ -1303,3 +1303,316 @@ a { color: inherit; }
    v6 — okunurluk öncelikli sonu
    ========================================================= */
 
+/* =========================================================
+   v7 — güçlü tipografi + mobil tam-sahne deneyimi
+   ========================================================= */
+
+/* sahne numaraları arayüz öğesi gibi görünmesin */
+.scene-index {
+  display: none !important;
+}
+
+/* masaüstü başlıklar: tipografi ikinci görsel unsur */
+.scene-copy h2 {
+  font-size: clamp(3.2rem, 5.5vw, 6.8rem) !important;
+  line-height: .96 !important;
+  letter-spacing: -.065em !important;
+  max-width: 10.5ch !important;
+  text-wrap: balance;
+}
+
+.scene-copy h2.title-medium {
+  font-size: clamp(2.9rem, 5vw, 6.2rem) !important;
+  max-width: 11ch !important;
+}
+
+.scene-copy h2.title-long {
+  font-size: clamp(2.55rem, 4.45vw, 5.5rem) !important;
+  max-width: 12ch !important;
+  line-height: .98 !important;
+}
+
+.scene-copy h2.title-short {
+  max-width: 9ch !important;
+}
+
+/* meta daha hafif; başlıkla yarışmasın */
+.scene-meta {
+  margin-bottom: 12px !important;
+  font-size: .56rem !important;
+  color: rgba(151,86,76,.86) !important;
+}
+
+/* kısa açıklama başlığın yanında yardımcı metin */
+.scene-copy > p {
+  font-size: clamp(.9rem, 1vw, .98rem) !important;
+  line-height: 1.62 !important;
+  max-width: 31ch !important;
+}
+
+/* ---------- 1. sahne: büyük görsel + hemen altında güçlü tipografi ---------- */
+.scene-immersive {
+  padding-bottom: 6vh !important;
+}
+
+.scene-immersive .scene-media {
+  height: min(77svh, 840px) !important;
+}
+
+.scene-immersive .scene-copy {
+  width: min(1240px, calc(100vw - 76px)) !important;
+  padding-top: 22px !important;
+  grid-template-columns: minmax(0, 1.4fr) minmax(260px, .6fr) !important;
+  column-gap: 44px !important;
+}
+
+.scene-immersive .scene-copy h2 {
+  max-width: 10ch !important;
+}
+
+.scene-immersive .scene-copy > p {
+  align-self: end !important;
+}
+
+/* ---------- 2. sahne: dikey görsel + güçlü başlık ---------- */
+.scene-split {
+  grid-template-columns: minmax(320px, .8fr) minmax(0, 1.5fr) !important;
+  gap: clamp(24px, 3.2vw, 48px) !important;
+}
+
+.scene-split .scene-copy {
+  padding-left: clamp(4px, 1.6vw, 24px) !important;
+}
+
+.scene-split .scene-copy h2 {
+  max-width: 9.5ch !important;
+}
+
+/* ---------- 3. sahne: yatay görsel + yanında tipografi ---------- */
+.scene-offset {
+  grid-template-columns: minmax(0, 1.42fr) minmax(330px, .78fr) !important;
+  gap: clamp(34px, 4.5vw, 70px) !important;
+}
+
+.scene-offset .scene-media {
+  height: min(72svh, 760px) !important;
+}
+
+.scene-offset .scene-copy {
+  align-self: center !important;
+  padding-bottom: 0 !important;
+}
+
+.scene-offset .scene-copy h2 {
+  max-width: 9.5ch !important;
+}
+
+/* ---------- 4. sahne: küçük/dikey görsel + çok büyük başlık ---------- */
+.scene-portrait {
+  grid-template-columns: minmax(250px, .74fr) minmax(0, 1.26fr) !important;
+  gap: clamp(44px, 7vw, 110px) !important;
+}
+
+.scene-portrait .scene-media {
+  width: min(100%, 510px) !important;
+  height: min(76svh, 800px) !important;
+}
+
+.scene-portrait .scene-copy h2 {
+  font-size: clamp(3.4rem, 5.8vw, 7rem) !important;
+  max-width: 8.5ch !important;
+}
+
+/* ---------- 5. sahne: yatay görsel + alt bilgi düzeni ---------- */
+.scene-panorama .scene-copy {
+  grid-template-columns: minmax(0, 1.15fr) minmax(260px, .85fr) !important;
+  column-gap: 46px !important;
+}
+
+.scene-panorama .scene-copy h2 {
+  max-width: 10.5ch !important;
+}
+
+/* arayüz çizgileri daha da hafif */
+.archive-tools {
+  border-top-color: rgba(38,52,45,.035) !important;
+  border-bottom-color: rgba(38,52,45,.045) !important;
+}
+
+.story-scene::after {
+  background: rgba(38,52,45,.055) !important;
+}
+
+/* =========================================================
+   MOBİL — kart değil, tam-sahne akışı
+   ========================================================= */
+
+@media (max-width: 760px) {
+
+  body {
+    background:
+      radial-gradient(circle at 50% 0%, rgba(159,90,79,.045), transparent 24rem),
+      var(--paper) !important;
+  }
+
+  .site-header {
+    width: calc(100% - 26px) !important;
+    padding-top: 14px !important;
+    padding-bottom: 8px !important;
+  }
+
+  .brand {
+    font-size: 1.34rem !important;
+  }
+
+  .archive-tools {
+    width: calc(100% - 26px) !important;
+    margin-top: 0 !important;
+    padding: 8px 0 !important;
+    background: rgba(238,227,210,.78) !important;
+    border-top: 0 !important;
+  }
+
+  .scene-counter {
+    display: none !important;
+  }
+
+  .story-scene,
+  .scene-split,
+  .scene-offset,
+  .scene-portrait,
+  .scene-panorama,
+  .scene-immersive {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    min-height: auto !important;
+    padding: 18px 0 48px !important;
+    overflow: hidden !important;
+  }
+
+  .story-scene::after {
+    left: 14px !important;
+    right: 14px !important;
+  }
+
+  /* görseller kart değil: ekran genişliğine yakın sahne */
+  .scene-media,
+  .scene-split .scene-media,
+  .scene-offset .scene-media,
+  .scene-portrait .scene-media,
+  .scene-panorama .scene-media,
+  .scene-immersive .scene-media {
+    order: 1 !important;
+    width: 100vw !important;
+    max-width: none !important;
+    height: 68svh !important;
+    max-height: 720px !important;
+    margin-left: calc(50% - 50vw) !important;
+    margin-right: calc(50% - 50vw) !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
+
+  .scene-portrait .scene-media {
+    height: 74svh !important;
+  }
+
+  .scene-panorama .scene-media {
+    height: 56svh !important;
+  }
+
+  .scene-media::after {
+    box-shadow:
+      inset 0 0 0 1px rgba(42,37,32,.055),
+      inset 0 0 70px rgba(74,50,32,.015) !important;
+  }
+
+  /* metin kart değil; sadece zeminde tipografik blok */
+  .scene-copy,
+  .scene-split .scene-copy,
+  .scene-offset .scene-copy,
+  .scene-portrait .scene-copy,
+  .scene-panorama .scene-copy,
+  .scene-immersive .scene-copy {
+    position: static !important;
+    order: 2 !important;
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 16px 16px 0 !important;
+    background: transparent !important;
+    color: var(--ink) !important;
+    transform: translateY(16px) !important;
+  }
+
+  .story-scene.is-revealed .scene-copy,
+  .story-scene.is-revealed.scene-split .scene-copy {
+    transform: translateY(0) !important;
+  }
+
+  .scene-copy h2,
+  .scene-copy h2.title-short,
+  .scene-copy h2.title-medium,
+  .scene-copy h2.title-long,
+  .scene-immersive .scene-copy h2,
+  .scene-offset .scene-copy h2,
+  .scene-portrait .scene-copy h2,
+  .scene-panorama .scene-copy h2 {
+    font-size: clamp(2.5rem, 12.8vw, 4.2rem) !important;
+    line-height: .98 !important;
+    letter-spacing: -.06em !important;
+    max-width: 10.5ch !important;
+    margin: 0 !important;
+  }
+
+  .scene-copy h2.title-long {
+    font-size: clamp(2.22rem, 11.4vw, 3.7rem) !important;
+    max-width: 11.5ch !important;
+  }
+
+  .scene-copy > p,
+  .scene-immersive .scene-copy > p {
+    margin-top: 12px !important;
+    max-width: 31ch !important;
+    font-size: .92rem !important;
+    line-height: 1.6 !important;
+    color: #665e55 !important;
+  }
+
+  .scene-meta,
+  .scene-immersive .scene-meta {
+    margin-bottom: 9px !important;
+    color: #97564c !important;
+  }
+
+  .read-link,
+  .scene-immersive .read-link {
+    margin-top: 17px !important;
+    color: var(--ink) !important;
+  }
+
+  .scene-media img {
+    transform: scale(1.012) !important;
+  }
+
+  .story-scene:hover .scene-media img {
+    transform: scale(1.018) !important;
+  }
+
+  .load-more-wrap {
+    width: calc(100% - 28px) !important;
+    margin-top: 42px !important;
+  }
+
+  .load-more {
+    width: 100% !important;
+    padding: 15px 20px !important;
+  }
+}
+
+/* =========================================================
+   v7 — güçlü tipografi + mobil tam-sahne sonu
+   ========================================================= */
+

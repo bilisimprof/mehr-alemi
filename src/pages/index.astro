@@ -22,6 +22,12 @@ const sceneClass = (index: number) => {
   ];
   return sequence[index % sequence.length];
 };
+
+const titleClass = (title: string) => {
+  if (title.length >= 28) return 'title-long';
+  if (title.length >= 20) return 'title-medium';
+  return 'title-short';
+};
 ---
 <BaseLayout title="mehr alemi" pageClass="archive-page">
   <div class="archive-tools">
@@ -66,7 +72,7 @@ const sceneClass = (index: number) => {
             <time datetime={entry.data.date.toISOString()}>{formatDate(entry.data.date)}</time>
           </div>
 
-          <h2>
+          <h2 class={titleClass(entry.data.title)}>
             <a href={`/yazilar/${entry.id}/`}>{entry.data.title}</a>
           </h2>
 
