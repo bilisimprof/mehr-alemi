@@ -14,11 +14,14 @@ const formatDate = (date: Date) =>
 
 const sceneClass = (index: number) => {
   const sequence = [
-    'scene-immersive',
-    'scene-split',
-    'scene-offset',
-    'scene-portrait',
-    'scene-panorama',
+    'scene-hero-top',
+    'scene-split-left',
+    'scene-split-right',
+    'scene-wide-under',
+    'scene-portrait-left',
+    'scene-portrait-right',
+    'scene-narrow-left',
+    'scene-panorama-under',
   ];
   return sequence[index % sequence.length];
 };

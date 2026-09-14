@@ -1616,3 +1616,460 @@ a { color: inherit; }
    v7 — güçlü tipografi + mobil tam-sahne sonu
    ========================================================= */
 
+/* =========================================================
+   v8 — digital exhibition
+   8 masaüstü sahnesi + bağımsız mobil deneyim
+   ========================================================= */
+
+/* eski sahne kurallarının V8 düzenlerine sızmasını engelle */
+.scene-hero-top,
+.scene-split-left,
+.scene-split-right,
+.scene-wide-under,
+.scene-portrait-left,
+.scene-portrait-right,
+.scene-narrow-left,
+.scene-panorama-under {
+  display: grid !important;
+  min-height: 90svh !important;
+  align-items: center !important;
+  padding-top: clamp(42px, 6vh, 72px) !important;
+  padding-bottom: clamp(46px, 7vh, 84px) !important;
+}
+
+/* V8 metin ölçeği */
+.scene-copy h2 {
+  font-size: clamp(3.25rem, 5.7vw, 7rem) !important;
+  line-height: .96 !important;
+  letter-spacing: -.067em !important;
+  max-width: 10.5ch !important;
+}
+
+.scene-copy h2.title-medium {
+  font-size: clamp(3rem, 5.15vw, 6.35rem) !important;
+  max-width: 11ch !important;
+}
+
+.scene-copy h2.title-long {
+  font-size: clamp(2.65rem, 4.55vw, 5.65rem) !important;
+  line-height: .985 !important;
+  max-width: 12ch !important;
+}
+
+.scene-copy > p {
+  max-width: 30ch !important;
+  font-size: clamp(.91rem, 1vw, 1rem) !important;
+  line-height: 1.64 !important;
+}
+
+/* ---------- 1: hero-top ---------- */
+.scene-hero-top {
+  grid-template-columns: 1fr !important;
+  min-height: auto !important;
+}
+
+.scene-hero-top .scene-media {
+  width: min(1600px, calc(100vw - 22px)) !important;
+  height: min(76svh, 820px) !important;
+  justify-self: center !important;
+}
+
+.scene-hero-top .scene-copy {
+  width: min(1240px, calc(100vw - 78px)) !important;
+  justify-self: center !important;
+  padding-top: 22px !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.35fr) minmax(260px, .65fr) !important;
+  column-gap: 50px !important;
+  align-items: end !important;
+}
+
+.scene-hero-top .scene-meta,
+.scene-hero-top .scene-copy h2 {
+  grid-column: 1 !important;
+}
+
+.scene-hero-top .scene-copy > p {
+  grid-column: 2 !important;
+  grid-row: 1 / span 2 !important;
+  align-self: end !important;
+}
+
+.scene-hero-top .read-link {
+  grid-column: 2 !important;
+}
+
+/* ---------- 2: split-left ---------- */
+.scene-split-left {
+  grid-template-columns: minmax(330px, .86fr) minmax(0, 1.55fr) !important;
+  gap: clamp(28px, 4vw, 64px) !important;
+}
+
+.scene-split-left .scene-media {
+  height: min(79svh, 840px) !important;
+}
+
+.scene-split-left .scene-copy {
+  padding-left: clamp(0px, 1.6vw, 26px) !important;
+}
+
+.scene-split-left .scene-copy h2 {
+  max-width: 9.5ch !important;
+}
+
+/* ---------- 3: split-right ---------- */
+.scene-split-right {
+  grid-template-columns: minmax(0, 1.55fr) minmax(330px, .86fr) !important;
+  gap: clamp(28px, 4vw, 64px) !important;
+}
+
+.scene-split-right .scene-copy {
+  order: 1 !important;
+  padding-right: clamp(0px, 1.6vw, 26px) !important;
+  justify-self: end !important;
+}
+
+.scene-split-right .scene-media {
+  order: 2 !important;
+  height: min(79svh, 840px) !important;
+}
+
+.scene-split-right .scene-copy h2 {
+  max-width: 9.5ch !important;
+}
+
+/* ---------- 4: wide-under ---------- */
+.scene-wide-under {
+  grid-template-columns: 1fr !important;
+  min-height: auto !important;
+}
+
+.scene-wide-under .scene-media {
+  width: min(1450px, calc(100vw - 54px)) !important;
+  height: min(65svh, 680px) !important;
+  justify-self: center !important;
+}
+
+.scene-wide-under .scene-copy {
+  width: min(1160px, calc(100vw - 84px)) !important;
+  justify-self: center !important;
+  padding-top: 26px !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.2fr) minmax(260px, .8fr) !important;
+  column-gap: 48px !important;
+  align-items: end !important;
+}
+
+.scene-wide-under .scene-meta,
+.scene-wide-under .scene-copy h2 {
+  grid-column: 1 !important;
+}
+
+.scene-wide-under .scene-copy > p,
+.scene-wide-under .read-link {
+  grid-column: 2 !important;
+}
+
+.scene-wide-under .scene-copy > p {
+  grid-row: 1 / span 2 !important;
+  align-self: end !important;
+}
+
+/* ---------- 5: portrait-left ---------- */
+.scene-portrait-left {
+  grid-template-columns: minmax(250px, .7fr) minmax(0, 1.3fr) !important;
+  gap: clamp(46px, 8vw, 120px) !important;
+  padding-left: max(5vw, calc((100vw - 1180px) / 2)) !important;
+  padding-right: max(5vw, calc((100vw - 1180px) / 2)) !important;
+}
+
+.scene-portrait-left .scene-media {
+  width: min(100%, 500px) !important;
+  height: min(78svh, 820px) !important;
+  justify-self: end !important;
+}
+
+.scene-portrait-left .scene-copy h2 {
+  font-size: clamp(3.45rem, 6vw, 7.2rem) !important;
+  max-width: 8.5ch !important;
+}
+
+/* ---------- 6: portrait-right ---------- */
+.scene-portrait-right {
+  grid-template-columns: minmax(0, 1.3fr) minmax(250px, .7fr) !important;
+  gap: clamp(46px, 8vw, 120px) !important;
+  padding-left: max(5vw, calc((100vw - 1180px) / 2)) !important;
+  padding-right: max(5vw, calc((100vw - 1180px) / 2)) !important;
+}
+
+.scene-portrait-right .scene-copy {
+  order: 1 !important;
+  justify-self: end !important;
+}
+
+.scene-portrait-right .scene-media {
+  order: 2 !important;
+  width: min(100%, 500px) !important;
+  height: min(78svh, 820px) !important;
+  justify-self: start !important;
+}
+
+.scene-portrait-right .scene-copy h2 {
+  font-size: clamp(3.45rem, 6vw, 7.2rem) !important;
+  max-width: 8.5ch !important;
+}
+
+/* ---------- 7: narrow-left ---------- */
+.scene-narrow-left {
+  grid-template-columns: minmax(230px, .52fr) minmax(0, 1.48fr) !important;
+  gap: clamp(50px, 9vw, 140px) !important;
+  width: min(1180px, calc(100% - 68px)) !important;
+  margin: 0 auto !important;
+}
+
+.scene-narrow-left .scene-media {
+  width: min(100%, 390px) !important;
+  height: min(72svh, 760px) !important;
+  justify-self: center !important;
+}
+
+.scene-narrow-left .scene-copy {
+  align-self: center !important;
+}
+
+.scene-narrow-left .scene-copy h2 {
+  font-size: clamp(3.6rem, 6.3vw, 7.5rem) !important;
+  max-width: 8.4ch !important;
+}
+
+/* ---------- 8: panorama-under ---------- */
+.scene-panorama-under {
+  grid-template-columns: 1fr !important;
+  min-height: auto !important;
+}
+
+.scene-panorama-under .scene-media {
+  width: min(1540px, calc(100vw - 30px)) !important;
+  height: min(58svh, 610px) !important;
+  justify-self: center !important;
+}
+
+.scene-panorama-under .scene-copy {
+  width: min(1220px, calc(100vw - 80px)) !important;
+  justify-self: center !important;
+  padding-top: 24px !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.45fr) minmax(260px, .55fr) !important;
+  gap: 44px !important;
+  align-items: start !important;
+}
+
+.scene-panorama-under .scene-copy h2 {
+  max-width: 11ch !important;
+}
+
+.scene-panorama-under .scene-copy > p {
+  align-self: end !important;
+}
+
+/* masaüstü 30 içerikte arayüz minimumda */
+.archive-tools {
+  background: rgba(238,227,210,.48) !important;
+  border-bottom-color: rgba(38,52,45,.032) !important;
+}
+
+.scene-counter {
+  opacity: .72 !important;
+}
+
+.story-scene::after {
+  background: rgba(38,52,45,.045) !important;
+}
+
+/* =========================================================
+   MOBİL V8 — masaüstünden bağımsız, kart değil sahne
+   ========================================================= */
+@media (max-width: 760px) {
+
+  .site-header {
+    position: relative !important;
+    width: calc(100% - 24px) !important;
+    padding: 13px 0 7px !important;
+  }
+
+  .brand {
+    font-size: 1.30rem !important;
+  }
+
+  .main-nav {
+    gap: 14px !important;
+    font-size: .54rem !important;
+  }
+
+  .archive-tools {
+    position: sticky !important;
+    top: 0 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 9px 13px !important;
+    border: 0 !important;
+    border-bottom: 1px solid rgba(38,52,45,.045) !important;
+    background: rgba(238,227,210,.86) !important;
+    backdrop-filter: blur(14px) !important;
+    -webkit-backdrop-filter: blur(14px) !important;
+  }
+
+  .filters {
+    gap: 16px !important;
+  }
+
+  .filter {
+    font-size: .55rem !important;
+  }
+
+  .scene-counter {
+    display: none !important;
+  }
+
+  /* bütün masaüstü varyasyonları mobilde tek güçlü ritme dönüşür */
+  .scene-hero-top,
+  .scene-split-left,
+  .scene-split-right,
+  .scene-wide-under,
+  .scene-portrait-left,
+  .scene-portrait-right,
+  .scene-narrow-left,
+  .scene-panorama-under {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    min-height: auto !important;
+    margin: 0 !important;
+    padding: 0 0 52px !important;
+    gap: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .story-scene::after {
+    left: 14px !important;
+    right: 14px !important;
+  }
+
+  /* görsel: gerçek sahne, ekran kenarına kadar */
+  .scene-hero-top .scene-media,
+  .scene-split-left .scene-media,
+  .scene-split-right .scene-media,
+  .scene-wide-under .scene-media,
+  .scene-portrait-left .scene-media,
+  .scene-portrait-right .scene-media,
+  .scene-narrow-left .scene-media,
+  .scene-panorama-under .scene-media {
+    order: 1 !important;
+    width: 100vw !important;
+    max-width: none !important;
+    height: 66svh !important;
+    max-height: 700px !important;
+    margin: 0 calc(50% - 50vw) !important;
+    justify-self: auto !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
+
+  /* portre içeriklerde biraz daha uzun kadraj */
+  .scene-portrait-left .scene-media,
+  .scene-portrait-right .scene-media,
+  .scene-narrow-left .scene-media {
+    height: 76svh !important;
+  }
+
+  /* panoramalarda daha yatay kadraj */
+  .scene-wide-under .scene-media,
+  .scene-panorama-under .scene-media {
+    height: 54svh !important;
+  }
+
+  .scene-media img {
+    object-position: center center !important;
+  }
+
+  /* metin: görselin hemen devamı; kart yok */
+  .scene-hero-top .scene-copy,
+  .scene-split-left .scene-copy,
+  .scene-split-right .scene-copy,
+  .scene-wide-under .scene-copy,
+  .scene-portrait-left .scene-copy,
+  .scene-portrait-right .scene-copy,
+  .scene-narrow-left .scene-copy,
+  .scene-panorama-under .scene-copy {
+    position: static !important;
+    order: 2 !important;
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 17px 15px 0 !important;
+    background: transparent !important;
+    color: var(--ink) !important;
+    justify-self: auto !important;
+    align-self: auto !important;
+  }
+
+  .scene-copy h2,
+  .scene-copy h2.title-short,
+  .scene-copy h2.title-medium,
+  .scene-copy h2.title-long,
+  .scene-portrait-left .scene-copy h2,
+  .scene-portrait-right .scene-copy h2,
+  .scene-narrow-left .scene-copy h2 {
+    font-size: clamp(2.6rem, 13vw, 4.25rem) !important;
+    line-height: .97 !important;
+    letter-spacing: -.063em !important;
+    max-width: 10.5ch !important;
+    margin: 0 !important;
+  }
+
+  .scene-copy h2.title-long {
+    font-size: clamp(2.28rem, 11.4vw, 3.75rem) !important;
+    max-width: 11.5ch !important;
+  }
+
+  .scene-meta {
+    margin-bottom: 9px !important;
+    font-size: .54rem !important;
+  }
+
+  .scene-copy > p {
+    margin-top: 12px !important;
+    max-width: 31ch !important;
+    font-size: .91rem !important;
+    line-height: 1.58 !important;
+  }
+
+  .read-link {
+    margin-top: 16px !important;
+  }
+
+  /* mobilde daha doğal giriş */
+  .story-scene {
+    transform: translateY(16px) !important;
+  }
+
+  .story-scene.is-revealed {
+    transform: translateY(0) !important;
+  }
+
+  .load-more-wrap {
+    width: calc(100% - 28px) !important;
+    margin-top: 34px !important;
+  }
+
+  .load-more {
+    width: 100% !important;
+    padding: 15px 20px !important;
+  }
+}
+
+/* =========================================================
+   v8 — digital exhibition sonu
+   ========================================================= */
+
