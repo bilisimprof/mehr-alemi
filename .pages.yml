@@ -1,0 +1,128 @@
+media:
+  - name: images
+    label: görseller
+    input: public/media
+    output: /media
+    rename: safe
+    extensions: [jpg, jpeg, png, webp, avif, gif, svg]
+
+content:
+  - name: yazilar
+    label: yazılar
+    type: collection
+    path: src/data/yazilar
+    filename:
+      template: "{fields.slug}.md"
+      field: false
+    view:
+      fields: [title, type, date, published]
+      primary: title
+      sort: [date, title]
+      search: [title, excerpt]
+      default:
+        sort: date
+        order: desc
+    fields:
+      - name: title
+        label: başlık
+        type: string
+        required: true
+        description: küçük harf kullan.
+      - name: slug
+        label: bağlantı adı
+        type: string
+        required: true
+        pattern:
+          regex: "^[a-z0-9-]+$"
+          message: yalnızca küçük harf, rakam ve tire kullan.
+        description: örnek: gecenin-icinden
+      - name: type
+        label: tür
+        type: select
+        required: true
+        options:
+          values:
+            - name: şiir
+              label: şiir
+            - name: düz yazı
+              label: düz yazı
+      - name: date
+        label: tarih
+        type: date
+        required: true
+        options:
+          format: yyyy-MM-dd
+      - name: cover
+        label: ana görsel
+        type: image
+        required: true
+        options:
+          media: images
+          rename: safe
+          extensions: [jpg, jpeg, png, webp, avif]
+      - name: mobileCover
+        label: mobil görsel
+        type: image
+        required: false
+        description: boş bırakırsan ana görsel kullanılır.
+        options:
+          media: images
+          rename: safe
+          extensions: [jpg, jpeg, png, webp, avif]
+      - name: excerpt
+        label: kısa giriş
+        type: text
+        required: false
+        description: ana sayfada görselin yanında kısa bir cümle; zorunlu değil.
+      - name: featured
+        label: öne çıkan
+        type: boolean
+        default: false
+      - name: published
+        label: yayımla
+        type: boolean
+        default: true
+      - name: body
+        label: metin
+        type: rich-text
+        required: true
+        options:
+          media: images
+          rename: safe
+          switcher: false
+
+  - name: hakkinda
+    label: hakkında
+    type: file
+    path: src/data/pages/hakkinda.md
+    operations:
+      delete: false
+    fields:
+      - name: title
+        label: başlık
+        type: string
+        required: true
+      - name: portrait
+        label: portre / görsel
+        type: image
+        required: false
+        options:
+          media: images
+          rename: safe
+      - name: body
+        label: metin
+        type: rich-text
+        required: true
+        options:
+          media: images
+          rename: safe
+          switcher: false
+
+settings:
+  commit:
+    identity: app
+    templates:
+      create: "içerik ekle: {path}"
+      update: "içerik güncelle: {path}"
+      delete: "içerik sil: {path}"
+      rename: "içerik yeniden adlandır: {oldPath} -> {newPath}"
