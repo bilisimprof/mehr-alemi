@@ -1,0 +1,194 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const entries = (await getCollection('yazilar', ({ data }) => data.published))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const formatDate = (date: Date) =>
+  new Intl.DateTimeFormat('tr-TR', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  }).format(date).toLocaleLowerCase('tr-TR');
+
+const sceneClass = (index: number) => {
+  const sequence = [
+    'scene-immersive',
+    'scene-split',
+    'scene-offset',
+    'scene-portrait',
+    'scene-panorama',
+  ];
+  return sequence[index % sequence.length];
+};
+---
+<BaseLayout title="mehr alemi" pageClass="archive-page">
+  <div class="archive-tools">
+    <div class="filters" role="group" aria-label="yazı türleri">
+      <button class="filter is-active" type="button" data-filter="hepsi">hepsi</button>
+      <button class="filter" type="button" data-filter="şiir">şiir</button>
+      <button class="filter" type="button" data-filter="düz yazı">düz yazı</button>
+    </div>
+
+    <div class="scene-counter" aria-hidden="true">
+      <span class="scene-current">01</span>
+      <span class="scene-divider"></span>
+      <span class="scene-total">00</span>
+    </div>
+  </div>
+
+  <section class="story-stream" data-visible-count="5">
+    {entries.map((entry, index) => (
+      <article
+        class={`story-scene ${sceneClass(index)} ${entry.data.featured ? 'is-featured' : ''}`}
+        data-type={entry.data.type}
+        data-index={index}
+      >
+        <a class="scene-media" href={`/yazilar/${entry.id}/`} aria-label={entry.data.title}>
+          <picture>
+            {entry.data.mobileCover && (
+              <source media="(max-width: 700px)" srcset={entry.data.mobileCover} />
+            )}
+            <img
+              src={entry.data.cover}
+              alt=""
+              loading={index < 2 ? 'eager' : 'lazy'}
+              decoding="async"
+            />
+          </picture>
+        </a>
+
+        <div class="scene-copy">
+          <div class="scene-meta">
+            <span>{entry.data.type}</span>
+            <span>·</span>
+            <time datetime={entry.data.date.toISOString()}>{formatDate(entry.data.date)}</time>
+          </div>
+
+          <h2>
+            <a href={`/yazilar/${entry.id}/`}>{entry.data.title}</a>
+          </h2>
+
+          {entry.data.excerpt && <p>{entry.data.excerpt}</p>}
+
+          <a class="read-link" href={`/yazilar/${entry.id}/`}>
+            <span>oku</span>
+          </a>
+        </div>
+
+        <div class="scene-index" aria-hidden="true">
+          {String(index + 1).padStart(2, '0')}
+        </div>
+      </article>
+    ))}
+  </section>
+
+  <div class="load-more-wrap">
+    <button class="load-more" type="button">daha fazlasını gör</button>
+  </div>
+
+  <script>
+    const scenes = Array.from(document.querySelectorAll('.story-scene'));
+    const filters = Array.from(document.querySelectorAll('.filter'));
+    const loadMore = document.querySelector('.load-more');
+    const currentEl = document.querySelector('.scene-current');
+    const totalEl = document.querySelector('.scene-total');
+
+    let activeFilter = 'hepsi';
+    let limit = 5;
+
+    function matchingScenes() {
+      return scenes.filter((scene) =>
+        activeFilter === 'hepsi' || scene.dataset.type === activeFilter
+      );
+    }
+
+    function visibleScenes() {
+      return matchingScenes().filter((scene) => !scene.hidden);
+    }
+
+    function updateCounterTotal() {
+      const total = visibleScenes().length;
+      if (totalEl) totalEl.textContent = String(total).padStart(2, '0');
+      if (currentEl && total === 0) currentEl.textContent = '00';
+    }
+
+    function renderArchive() {
+      const matches = matchingScenes();
+
+      scenes.forEach((scene) => {
+        scene.hidden = true;
+        scene.classList.remove('is-revealed');
+      });
+
+      matches.slice(0, limit).forEach((scene, i) => {
+        scene.hidden = false;
+        requestAnimationFrame(() => {
+          setTimeout(() => scene.classList.add('is-revealed'), i * 55);
+        });
+      });
+
+      if (loadMore) {
+        loadMore.hidden = matches.length <= limit;
+      }
+
+      updateCounterTotal();
+      observeScenes();
+    }
+
+    filters.forEach((button) => {
+      button.addEventListener('click', () => {
+        activeFilter = button.dataset.filter || 'hepsi';
+        limit = 5;
+        filters.forEach((b) => b.classList.toggle('is-active', b === button));
+        renderArchive();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
+
+    loadMore?.addEventListener('click', () => {
+      limit += 4;
+      renderArchive();
+    });
+
+    let observer;
+
+    function observeScenes() {
+      observer?.disconnect();
+
+      const activeScenes = visibleScenes();
+      if (!activeScenes.length) return;
+
+      observer = new IntersectionObserver(
+        (entries) => {
+          const visible = entries
+            .filter((entry) => entry.isIntersecting)
+            .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+
+          if (!visible.length) return;
+
+          const scene = visible[0].target;
+          const index = activeScenes.indexOf(scene) + 1;
+
+          if (currentEl && index > 0) {
+            currentEl.textContent = String(index).padStart(2, '0');
+          }
+
+          activeScenes.forEach((item) => {
+            item.classList.toggle('is-current', item === scene);
+          });
+        },
+        {
+          root: null,
+          threshold: [0.35, 0.55, 0.72],
+          rootMargin: '-10% 0px -10% 0px',
+        }
+      );
+
+      activeScenes.forEach((scene) => observer.observe(scene));
+    }
+
+    renderArchive();
+  </script>
+</BaseLayout>
