@@ -1,32 +1,10 @@
-# mehr alemi
+# mehr alemi — V11
 
-astro + pages cms ile hazırlanmış görsel-edebî arşiv başlangıç projesi.
+Tipografi + spacing + animasyon polish sürümü.
 
-## yönetim
+- Desktop: daha sıkı ritim, daha güçlü başlıklar, daha az gereksiz boşluk.
+- Mobile: V10'un kart akışı korunur; başlık ve içerik hiyerarşisi güçlendirilir.
+- Animasyon: daha kısa hareket mesafesi, yumuşak reveal, daha hafif parallax.
+- İçerik ve mevcut 30 test görseli korunur.
 
-site sahibi içerikleri Pages CMS üzerinden yönetir:
-
-- başlık
-- tür: şiir / düz yazı
-- tarih
-- ana görsel
-- isteğe bağlı mobil görsel
-- kısa giriş
-- tam metin
-- yayımla
-
-## cloudflare pages
-
-build command:
-
-```text
-npm run build
-```
-
-build output directory:
-
-```text
-dist
-```
-
-node sürümü için güncel bir LTS sürümünü kullan.
+Mevcut projede doğrudan çalıştırılabilir.

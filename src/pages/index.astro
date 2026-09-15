@@ -140,7 +140,7 @@ const titleClass = (title: string) => {
             revealObserver?.unobserve(entry.target);
           });
         },
-        { threshold: 0.12, rootMargin: '0px 0px -10% 0px' }
+        { threshold: 0.10, rootMargin: '0px 0px -8% 0px' }
       );
 
       visibleScenes().forEach((scene) => revealObserver.observe(scene));
@@ -188,7 +188,7 @@ const titleClass = (title: string) => {
 
         const sceneCenter = rect.top + rect.height / 2;
         const distance = (sceneCenter - viewportCenter) / window.innerHeight;
-        const translate = Math.max(-9, Math.min(9, distance * -7));
+        const translate = Math.max(-5, Math.min(5, distance * -4));
         media.style.setProperty('--parallax-y', `${translate}px`);
       });
     }

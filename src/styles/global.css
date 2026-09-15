@@ -164,13 +164,13 @@ a { color: inherit; }
 .story-scene {
   position: relative;
   width: 100%;
-  min-height: 76svh;
-  padding: clamp(58px, 8vh, 96px) max(24px, calc((100vw - 1320px) / 2));
+  min-height: 64svh;
+  padding: clamp(52px, 6.5vh, 78px) max(24px, calc((100vw - 1320px) / 2));
   opacity: 0;
-  transform: translate3d(0, 34px, 0);
+  transform: translate3d(0, 22px, 0);
   transition:
-    opacity .72s var(--ease-out),
-    transform .9s var(--ease-out);
+    opacity .82s var(--ease-out),
+    transform .96s var(--ease-out);
   will-change: opacity, transform;
   content-visibility: auto;
   contain-intrinsic-size: 0 760px;
@@ -196,10 +196,10 @@ a { color: inherit; }
 .scene-media,
 .scene-copy {
   opacity: 0;
-  transform: translate3d(0, 22px, 0);
+  transform: translate3d(0, 14px, 0);
   transition:
-    opacity .7s var(--ease-out),
-    transform .82s var(--ease-out);
+    opacity .72s var(--ease-out),
+    transform .88s var(--ease-out);
 }
 
 .scene-media { will-change: opacity, transform; }
@@ -221,10 +221,10 @@ a { color: inherit; }
 .scene-copy > p,
 .scene-copy .read-link {
   opacity: 0;
-  transform: translate3d(0, 13px, 0);
+  transform: translate3d(0, 9px, 0);
   transition:
-    opacity .62s var(--ease-out),
-    transform .7s var(--ease-out);
+    opacity .58s var(--ease-out),
+    transform .72s var(--ease-out);
 }
 
 .story-scene.is-revealed .scene-meta { opacity: 1; transform: none; transition-delay: .16s; }
@@ -253,15 +253,15 @@ a { color: inherit; }
   --parallax-y: 0px;
   object-fit: cover;
   filter: saturate(.88) contrast(.98) sepia(.02);
-  transform: translate3d(0, var(--parallax-y), 0) scale(1.018);
+  transform: translate3d(0, var(--parallax-y), 0) scale(1.012);
   transition:
-    transform 1.1s var(--ease-out),
+    transform 1.25s var(--ease-out),
     filter .7s var(--ease-soft);
   will-change: transform;
 }
 
 .story-scene:hover .scene-media img {
-  transform: translate3d(0, var(--parallax-y), 0) scale(1.028);
+  transform: translate3d(0, var(--parallax-y), 0) scale(1.02);
   filter: saturate(.94) contrast(1);
 }
 
@@ -287,7 +287,7 @@ a { color: inherit; }
 .scene-copy h2 {
   margin: 0;
   color: var(--ink);
-  font-size: clamp(3.35rem, 5.5vw, 6.9rem);
+  font-size: clamp(3.7rem, 5.6vw, 7.4rem);
   font-weight: 400;
   line-height: .965;
   letter-spacing: -.064em;
@@ -298,12 +298,12 @@ a { color: inherit; }
 }
 
 .scene-copy h2.title-medium {
-  font-size: clamp(3.15rem, 5.1vw, 6.25rem);
+  font-size: clamp(3.45rem, 5.15vw, 6.5rem);
   max-width: 11ch;
 }
 
 .scene-copy h2.title-long {
-  font-size: clamp(2.9rem, 4.6vw, 5.7rem);
+  font-size: clamp(3.1rem, 4.75vw, 5.95rem);
   max-width: 12ch;
   line-height: .98;
 }
@@ -353,14 +353,14 @@ a { color: inherit; }
 
 .scene-hero .scene-media {
   width: min(1540px, calc(100vw - 20px));
-  height: min(70svh, 760px);
+  height: min(60svh, 680px);
   justify-self: center;
 }
 
 .scene-hero .scene-copy {
   width: min(1200px, calc(100vw - 82px));
   justify-self: center;
-  padding-top: 26px;
+  padding-top: 22px;
   display: grid;
   grid-template-columns: minmax(0, 1.3fr) minmax(240px, .7fr);
   column-gap: 56px;
@@ -390,7 +390,7 @@ a { color: inherit; }
 
 .scene-split .scene-media {
   width: 100%;
-  height: min(76svh, 810px);
+  height: min(64svh, 700px);
 }
 
 .scene-split.is-reversed .scene-copy { order: 1; }
@@ -410,12 +410,12 @@ a { color: inherit; }
 
 .scene-portrait .scene-media {
   width: min(100%, 500px);
-  height: min(77svh, 820px);
+  height: min(66svh, 720px);
   justify-self: end;
 }
 
 .scene-portrait .scene-copy h2 {
-  font-size: clamp(3.35rem, 5.7vw, 7rem);
+  font-size: clamp(3.65rem, 5.75vw, 7.25rem);
   max-width: 8.5ch;
 }
 
@@ -528,6 +528,35 @@ a { color: inherit; }
   outline-offset: 5px;
 }
 
+/* V11 — masaüstü tipografi ve ritim cilası */
+@media (min-width: 761px) {
+  .story-scene:not(.scene-hero) .scene-copy {
+    max-width: 680px;
+  }
+
+  .scene-copy > p {
+    max-width: 34ch;
+  }
+
+  .scene-split .scene-copy h2,
+  .scene-portrait .scene-copy h2 {
+    text-wrap: pretty;
+  }
+
+  .scene-index {
+    position: absolute;
+    left: max(24px, calc((100vw - 1320px) / 2));
+    bottom: 24px;
+    color: rgba(32,53,47,.25);
+    font: 400 clamp(1rem, 1.4vw, 1.45rem)/1 var(--serif);
+    letter-spacing: -.04em;
+  }
+
+  .story-scene.is-current .scene-index {
+    color: rgba(32,53,47,.52);
+  }
+}
+
 /* MOBİL V10 — gerçek kart sistemi: görsel + okunaklı içerik */
 @media (max-width: 760px) {
   body {
@@ -578,7 +607,7 @@ a { color: inherit; }
     border: 1px solid rgba(38,52,45,.10);
     background: rgba(246,237,225,.72);
     box-shadow: 0 14px 34px rgba(43,36,30,.055);
-    transform: translate3d(0, 22px, 0);
+    transform: translate3d(0, 16px, 0);
   }
 
   .story-scene::after { display: none; }
@@ -632,7 +661,7 @@ a { color: inherit; }
     width: 100%;
     max-width: none;
     margin: 0;
-    padding: 18px 18px 22px;
+    padding: 20px 18px 24px;
     background: transparent;
     transform: translate3d(0, 16px, 0);
   }
@@ -655,7 +684,7 @@ a { color: inherit; }
   .scene-portrait .scene-copy h2 {
     max-width: none;
     margin: 0;
-    font-size: clamp(2.25rem, 10.5vw, 3.65rem);
+    font-size: clamp(2.45rem, 10.8vw, 3.85rem);
     line-height: .94;
     letter-spacing: -.062em;
     text-wrap: balance;
@@ -663,19 +692,19 @@ a { color: inherit; }
 
   .scene-copy h2.title-long {
     max-width: none;
-    font-size: clamp(2.05rem, 9.5vw, 3.25rem);
+    font-size: clamp(2.2rem, 9.8vw, 3.4rem);
     line-height: .95;
   }
 
   .scene-copy > p {
     max-width: 34ch;
-    margin: 13px 0 0;
+    margin: 14px 0 0;
     font-size: .96rem;
     line-height: 1.62;
   }
 
   .read-link {
-    margin-top: 17px;
+    margin-top: 18px;
     font-size: .61rem;
   }
 
@@ -709,7 +738,7 @@ a { color: inherit; }
 }
 
 @media (min-width: 761px) and (max-width: 1050px) {
-  .scene-copy h2 { font-size: clamp(2.7rem, 5.3vw, 4.8rem); }
+  .scene-copy h2 { font-size: clamp(3rem, 5.3vw, 5.2rem); }
   .scene-split { gap: 28px; grid-template-columns: minmax(260px, .8fr) minmax(0, 1.2fr); }
   .scene-portrait { gap: 42px; }
 }
