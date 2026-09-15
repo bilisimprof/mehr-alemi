@@ -13,17 +13,14 @@ const formatDate = (date: Date) =>
   }).format(date).toLocaleLowerCase('tr-TR');
 
 const sceneClass = (index: number) => {
-  const sequence = [
-    'scene-hero-top',
-    'scene-split-left',
-    'scene-split-right',
-    'scene-wide-under',
-    'scene-portrait-left',
-    'scene-portrait-right',
-    'scene-narrow-left',
-    'scene-panorama-under',
-  ];
-  return sequence[index % sequence.length];
+  // V9: yalnızca üç ana masaüstü kompozisyonu. Her 6. içerik büyük hero
+  // ile ritmi sıfırlar; aradaki içerikler iki sütun ve portre düzenleri arasında
+  // sakin biçimde dönüşümlü ilerler. Mobilde bunların tamamı tek akışa iner.
+  if (index % 6 === 0) return 'scene-hero';
+
+  const remainder = index % 6;
+  if (remainder === 2 || remainder === 4) return 'scene-portrait';
+  return remainder === 3 ? 'scene-split is-reversed' : 'scene-split';
 };
 
 const titleClass = (title: string) => {
@@ -47,7 +44,7 @@ const titleClass = (title: string) => {
     </div>
   </div>
 
-  <section class="story-stream" data-visible-count="6">
+  <section class="story-stream" data-visible-count="6" aria-live="polite">
     {entries.map((entry, index) => (
       <article
         class={`story-scene ${sceneClass(index)} ${entry.data.featured ? 'is-featured' : ''}`}
@@ -109,6 +106,7 @@ const titleClass = (title: string) => {
     let limit = 6;
     let sceneObserver;
     let revealObserver;
+    let parallaxFrame = 0;
 
     function matchingScenes() {
       return scenes.filter((scene) =>
@@ -121,7 +119,7 @@ const titleClass = (title: string) => {
     }
 
     function updateCounterTotal() {
-      const total = visibleScenes().length;
+      const total = matchingScenes().length;
       if (totalEl) totalEl.textContent = String(total).padStart(2, '0');
       if (currentEl && total === 0) currentEl.textContent = '00';
     }
@@ -139,13 +137,10 @@ const titleClass = (title: string) => {
           entries.forEach((entry) => {
             if (!entry.isIntersecting) return;
             entry.target.classList.add('is-revealed');
-            revealObserver.unobserve(entry.target);
+            revealObserver?.unobserve(entry.target);
           });
         },
-        {
-          threshold: 0.12,
-          rootMargin: '0px 0px -8% 0px',
-        }
+        { threshold: 0.12, rootMargin: '0px 0px -10% 0px' }
       );
 
       visibleScenes().forEach((scene) => revealObserver.observe(scene));
@@ -154,7 +149,7 @@ const titleClass = (title: string) => {
     function setupCurrentSceneObserver() {
       sceneObserver?.disconnect();
 
-      const activeScenes = visibleScenes();
+      const activeScenes = matchingScenes();
       if (!activeScenes.length) return;
 
       sceneObserver = new IntersectionObserver(
@@ -167,25 +162,43 @@ const titleClass = (title: string) => {
 
           const scene = visible[0].target;
           const index = activeScenes.indexOf(scene) + 1;
-
-          if (currentEl && index > 0) {
-            currentEl.textContent = String(index).padStart(2, '0');
-          }
+          if (currentEl && index > 0) currentEl.textContent = String(index).padStart(2, '0');
 
           activeScenes.forEach((item) => {
             item.classList.toggle('is-current', item === scene);
           });
         },
-        {
-          threshold: [0.3, 0.48, 0.66],
-          rootMargin: '-12% 0px -16% 0px',
-        }
+        { threshold: [0.28, 0.48, 0.68], rootMargin: '-12% 0px -16% 0px' }
       );
 
-      activeScenes.forEach((scene) => sceneObserver.observe(scene));
+      visibleScenes().forEach((scene) => sceneObserver.observe(scene));
     }
 
-    function renderArchive() {
+    function updateParallax() {
+      parallaxFrame = 0;
+      if (reduceMotion || window.innerWidth < 761) return;
+
+      const viewportCenter = window.innerHeight / 2;
+      visibleScenes().forEach((scene) => {
+        const media = scene.querySelector('.scene-media img');
+        if (!media) return;
+
+        const rect = scene.getBoundingClientRect();
+        if (rect.bottom < -120 || rect.top > window.innerHeight + 120) return;
+
+        const sceneCenter = rect.top + rect.height / 2;
+        const distance = (sceneCenter - viewportCenter) / window.innerHeight;
+        const translate = Math.max(-9, Math.min(9, distance * -7));
+        media.style.setProperty('--parallax-y', `${translate}px`);
+      });
+    }
+
+    function scheduleParallax() {
+      if (parallaxFrame) return;
+      parallaxFrame = requestAnimationFrame(updateParallax);
+    }
+
+    function renderArchive({ scrollTop = false } = {}) {
       const matches = matchingScenes();
 
       scenes.forEach((scene) => {
@@ -197,14 +210,16 @@ const titleClass = (title: string) => {
         scene.hidden = false;
       });
 
-      if (loadMore) {
-        loadMore.hidden = matches.length <= limit;
-      }
+      if (loadMore) loadMore.hidden = matches.length <= limit;
 
       updateCounterTotal();
       setupRevealObserver();
       setupCurrentSceneObserver();
       scheduleParallax();
+
+      if (scrollTop) {
+        window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+      }
     }
 
     filters.forEach((button) => {
@@ -212,50 +227,22 @@ const titleClass = (title: string) => {
         activeFilter = button.dataset.filter || 'hepsi';
         limit = 6;
         filters.forEach((b) => b.classList.toggle('is-active', b === button));
-        renderArchive();
-
-        if (!reduceMotion) {
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        } else {
-          window.scrollTo(0, 0);
-        }
+        renderArchive({ scrollTop: true });
       });
     });
 
     loadMore?.addEventListener('click', () => {
+      const previousLimit = limit;
       limit += 6;
       renderArchive();
+
+      const firstNew = visibleScenes()[previousLimit];
+      if (firstNew && !reduceMotion) {
+        requestAnimationFrame(() => {
+          firstNew.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+      }
     });
-
-    // Hafif parallax: yalnızca transform kullanır, requestAnimationFrame ile throttle edilir.
-    let ticking = false;
-
-    function updateParallax() {
-      ticking = false;
-      if (reduceMotion || window.innerWidth < 761) return;
-
-      const viewportCenter = window.innerHeight / 2;
-
-      visibleScenes().forEach((scene) => {
-        const media = scene.querySelector('.scene-media img');
-        if (!media) return;
-
-        const rect = scene.getBoundingClientRect();
-        if (rect.bottom < -100 || rect.top > window.innerHeight + 100) return;
-
-        const sceneCenter = rect.top + rect.height / 2;
-        const distance = (sceneCenter - viewportCenter) / window.innerHeight;
-        const translate = Math.max(-14, Math.min(14, distance * -12));
-
-        media.style.setProperty('--parallax-y', `${translate}px`);
-      });
-    }
-
-    function scheduleParallax() {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(updateParallax);
-    }
 
     window.addEventListener('scroll', scheduleParallax, { passive: true });
     window.addEventListener('resize', scheduleParallax);
